@@ -15,6 +15,8 @@ public interface UserService extends UserDetailsService {
 
     Optional<User> getUserByUsername(String username);
 
+    Optional<User> getUserByEmail(String email);
+
     UserDetails loadUserByUsername(String username);
 
     List<User> getUsers();

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="user_page">
+    <div class="container-fluid">
+        <p class="h1">User information-page</p>
+        <div class="card">
+            <h5 class="card-header">
+                <strong>About user</strong>
+            </h5>
+            <div class="card-body">
+
+                <div class="container-fluid bg-white">
+                    <table class="table table-striped mt-3">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="usr : ${#authentication.principal}">
+                            <th scope="row" th:text="${usr.id}" />
+                            <td th:text="${usr.firstName}" />
+                            <td th:text="${usr.lastName}" />
+                            <td th:text="${usr.age}" />
+                            <td th:text="${usr.email}" />
+                            <td th:text="${#strings.listJoin(usr.roles,' ')}" />
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

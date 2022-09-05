@@ -39,6 +39,11 @@ public class UserServiceImp implements UserService {
         return userRepository.getUserByUsername(username);
     }
 
+    @Transactional
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
+
     @Transactional(readOnly = true)
     public List<User> getUsers() {
         List<User> result = new ArrayList<>();
@@ -48,6 +53,7 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     public void updateUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -58,7 +64,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.getUserByUsername(username);
+        Optional<User> user = userRepository.getUserByEmail(username);
         return user.orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
