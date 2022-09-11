@@ -52,6 +52,7 @@ public class User implements UserDetails {
         this.age = age;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.username = email;
     }
 
     public Long getId() {
@@ -160,13 +161,13 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return String.format(
-                "\t%s %s:\n\t\tUsername: %s\n\t\tAge     : %s\n\t\tE-mail  : %s\n\t\tPhone   : %s",
+                "{id:%s, email:%s, firstName:%s, lastName:%s, age:%s, roles:%s}",
+                id,
+                email,
                 firstName,
                 lastName,
-                username,
                 age,
-                email,
-                phoneNumber);
+                roles);
     }
 
     @Override
@@ -174,7 +175,7 @@ public class User implements UserDetails {
         if(obj != null) {
             if (obj.getClass() == this.getClass()) {
                 User user = (User) obj;
-                if (user.getUsername().equals(this.username) &&
+                if (user.getUsername().equals(this.email) &&
                         user.getPassword().equals(this.password)) {
                     return true;
                 }

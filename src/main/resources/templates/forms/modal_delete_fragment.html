@@ -1,0 +1,64 @@
+<div class="modal fade" id="modalDeleteUser" tabindex="-1" role="dialog" aria-labelledby="deleteUser" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete user</h5>
+                <button id="close1ModalDelete" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id='deleteUserForm'>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row justify-content-md-center">
+                            <div class="col-8">
+                                <fieldset disabled>
+                                <div class="input-group mb-3 justify-content-center">
+                                    <strong class="input-group justify-content-center">ID</strong>
+                                    <label></label>
+                                    <input id="deleteInputId" readonly type="text" class="form-control">
+                                </div>
+
+                                <div class="input-group mb-3 justify-content-center">
+                                    <strong class="input-group justify-content-center">First name</strong>
+                                    <label></label>
+                                    <input readonly id="deleteInputFirstName" type="text" class="form-control">
+                                </div>
+
+                                <div class="input-group mb-3 justify-content-center">
+                                    <strong class="input-group justify-content-center">Last name</strong>
+                                    <label></label>
+                                    <input readonly id="deleteInputLastName" type="text" class="form-control">
+                                </div>
+
+                                <div class="input-group mb-3 justify-content-center">
+                                    <strong class="input-group justify-content-center">Age</strong>
+                                    <label></label>
+                                    <input readonly id="deleteInputAge" type="number" class="form-control">
+                                </div>
+
+                                <div class="input-group mb-3 justify-content-center">
+                                    <strong class="input-group justify-content-center">Email</strong>
+                                    <label></label>
+                                    <input readonly id="deleteInputEmail" type="email" class="form-control">
+                                </div>
+
+                                <div class="input-group mb-3 justify-content-center">
+                                    <strong class="input-group justify-content-center">Role</strong>
+                                    <label></label>
+                                    <select readonly id="deleteSelectRoles" multiple class="form-control">
+                                    </select>
+                                </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="close2ModalDelete" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger secondDeleteButton">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

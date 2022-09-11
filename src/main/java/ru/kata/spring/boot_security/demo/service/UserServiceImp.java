@@ -31,7 +31,7 @@ public class UserServiceImp implements UserService {
 
     @Transactional(readOnly = true)
     public User getUser(Long id) {
-        return userRepository.findById(id).orElse(new User());
+        return userRepository.findById(id).orElse(null);
     }
 
     @Transactional(readOnly = true)

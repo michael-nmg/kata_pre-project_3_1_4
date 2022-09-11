@@ -43,10 +43,10 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/delete")
-    public String deleteUser(@RequestParam("userId") Long id) {
-        userService.removeUser(id);
-        return "redirect:/admin";
-    }
+//    @DeleteMapping("/delete")
+//    public String deleteUser(@RequestParam("userId") Long id) {
+//        userService.removeUser(id);
+//        return "redirect:/admin";
+//    }
 
 }

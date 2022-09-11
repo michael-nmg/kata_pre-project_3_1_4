@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>kata_pre-project_3_1_3</title>
+    <title>kata_pre-project_3_1_4: REST, js</title>
 </head>
 
 <body class="bg-light">
-    <div class="container-fluid">
-        <div class="row">
+<div class="container-fluid">
+    <div class="row">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <!--        <a class="navbar-brand" href="#" th:text="${profile.email} + ' with roles: ' + ${#strings.listJoin(profile.roles,' ')}"></a>-->
-            <a class="navbar-brand" href="#" th:text="${#authentication.principal.email} + ' with roles: ' + ${#strings.listJoin(#authentication.principal.authorities,' ')}"></a>
+            <a id="navbarMainText" class="navbar-brand" href="#"></a>
             <div class="collapse navbar-collapse justify-content-end" id="navbarText">
                 <ul class="navbar-nav justify-content-end me-auto mb-2 mb-xl-0">
                     <li class="nav-item">
@@ -25,16 +25,35 @@
                 </ul>
             </div>
         </nav>
-        </div>
-        <div class="row mt-5 bg-light"></div>
-        <div class="row mt-5 bg-light">
-            <div th:replace="${#authorization.expression('hasAuthority(''ADMIN'')')} ? 'forms/admin_fragment' : 'forms/user_fragment'"></div>
-        </div>
-
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </div>
+    <div class="row mt-5 bg-light"></div>
+    <div class="row mt-5 bg-light">
+        <div th:replace="${#authorization.expression('hasAuthority(''ADMIN'')')} ? 'forms/admin_fragment' : 'forms/user_fragment'"></div>
+    </div>
+
+    <!-- modal delete -->
+    <div th:replace="${#bools.isTrue(#authorization.expression('hasAuthority(''ADMIN'')'))} ? ~{forms/modal_delete_fragment} : ~{}"></div>
+    <!-- /modal delete -->
+
+    <!-- modal edit -->
+    <div th:replace="${#bools.isTrue(#authorization.expression('hasAuthority(''ADMIN'')'))} ? ~{forms/modal_edit_fragment} : ~{}"></div>
+    <!-- /modal edit -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <!-- admin's script -->
+    <div th:replace="${#bools.isTrue(#authorization.expression('hasAuthority(''ADMIN'')'))} ? ~{forms/script_fragments :: admin_script} : ~{forms/script_fragments :: user_script}"></div>
+    <!-- /admin's script -->
+
+</div>
 </body>
 
 </html>

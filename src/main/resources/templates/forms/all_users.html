@@ -22,32 +22,7 @@
                         <th scope="col">Delete</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr th:each="usr : ${table}">
-                        <th scope="row" th:text="${usr.id}"/>
-                        <td th:text="${usr.firstName}"/>
-                        <td th:text="${usr.lastName}"/>
-                        <td th:text="${usr.age}"/>
-                        <td th:text="${usr.email}"/>
-                        <td th:text="${#strings.listJoin(usr.getRoles(),' ')}"/>
-                        <td>
-                            <button type="submit" class="btn btn-info" data-toggle="modal"
-                                    th:attr="data-target='#editUser_'+${usr.id}">Edit
-                            </button>
-                            <!-- modal edit -->
-                            <div th:replace="forms/edit_user :: edit_user"></div>
-                            <!-- /modal edit -->
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger" data-toggle="modal"
-                                    th:attr="data-target='#deleteUser_'+${usr.id}">Delete
-                            </button>
-                            <!-- modal delete -->
-                            <div th:replace="forms/delete_user :: delete_user"></div>
-                            <!-- /modal delete -->
-                        </td>
-                    </tr>
-                    </tbody>
+                    <tbody id="tbodyOfAllUsers"></tbody>
                 </table>
             </div>
         </div>

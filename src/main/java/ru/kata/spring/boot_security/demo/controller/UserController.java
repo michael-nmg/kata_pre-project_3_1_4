@@ -19,9 +19,6 @@ public class UserController {
 
     @GetMapping("/user")
     public String getUser(ModelMap model, Authentication principal) {
-        model.addAttribute(
-                "profile",
-                userService.getUserByEmail(principal.getName()).orElse(new User()));
         return "index";
     }
 

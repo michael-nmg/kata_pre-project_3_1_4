@@ -17,10 +17,10 @@
       <h2 class="text-left">
         <strong>Please sign in</strong>
       </h2>
-      <form role="form" th:method="POST" th:action="@{/login}">
+      <form id="loginForm" role="form" th:method="POST" th:action="@{/login}">
         <div class="form-group">
-          <label for="email"></label>
-          <input type="email" name="email" class="form-control" id="email" placeholder="Email address" />
+          <label for="username"></label>
+          <input type="email" name="username" class="form-control" id="username" placeholder="Email address" />
         </div>
         <div class="form-group">
           <label for="password"></label>

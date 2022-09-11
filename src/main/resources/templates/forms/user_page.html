@@ -20,19 +20,10 @@
                             <th scope="col">Last Name</th>
                             <th scope="col">Age</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Role</th>
+                            <th scope="col">Roles</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:each="usr : ${#authentication.principal}">
-                            <th scope="row" th:text="${usr.id}" />
-                            <td th:text="${usr.firstName}" />
-                            <td th:text="${usr.lastName}" />
-                            <td th:text="${usr.age}" />
-                            <td th:text="${usr.email}" />
-                            <td th:text="${#strings.listJoin(usr.roles,' ')}" />
-                        </tr>
-                        </tbody>
+                        <tbody id="bodyUserPage"></tbody>
                     </table>
                 </div>
 

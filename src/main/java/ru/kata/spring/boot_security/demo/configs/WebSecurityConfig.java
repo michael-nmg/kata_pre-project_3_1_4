@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Configuration
@@ -26,15 +27,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .mvcMatchers("/login").permitAll()
-                .mvcMatchers("/admin", "/update", "/create", "/delete").hasAuthority("ADMIN")
-                .mvcMatchers("/user").hasAnyAuthority("ADMIN", "USER")
+                .mvcMatchers("/admin", "/update", "/create", "/delete", "/api/users/**").hasAuthority("ADMIN")
+                .mvcMatchers("/user", "/api/user").hasAnyAuthority("ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").usernameParameter("email").permitAll()
+                .formLogin().loginPage("/login").permitAll()
                 .successHandler(successUserHandler).permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login").permitAll();
+        http.csrf().disable();
+//        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
+
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
