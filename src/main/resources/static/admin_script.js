@@ -19,10 +19,11 @@ window.onload = function userTable() {
 
 let modalEdit = new bootstrap.Modal(document.getElementById('modalEditUser'));
 let modalDelete = new bootstrap.Modal(document.getElementById('modalDeleteUser'));
+const csrfToken = document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 
 async function createTable(users) {
     let tbody = document.getElementById("tbodyOfAllUsers");
-    return users.reduce((body, usr) => {
+    users.reduce((body, usr) => {
         let tr = document.createElement('tr');
         tr.setAttribute('id', `rowUser_${usr.id}`);
         ['id', "firstName", "lastName", "age", "email"].forEach(col => {
@@ -80,10 +81,9 @@ async function navbarPreview(usr) {
     document.getElementById("navbarMainText").text = `${usr.email} with roles: ${roles}`;
 }
 
-
 async function rolesBroadcast(roles) {
-    [newUserSelectRoles, editSelectRoles].forEach( select => {
-        roles.forEach( role => {
+    [newUserSelectRoles, editSelectRoles].forEach(select => {
+        roles.forEach(role => {
             let option = document.createElement('option');
             option.value = role.id;
             option.text = role.name;
@@ -102,36 +102,23 @@ const tool = (element, event, selector, handler) => {
 
 tool(document, 'click', '.firstEditButton', (ev) => {
     let row = ev.target.parentNode.parentNode;
-    let id = row.children[0].innerHTML;
-    let firstName = row.children[1].innerHTML;
-    let lastName = row.children[2].innerHTML;
-    let age = row.children[3].innerHTML;
-    let email = row.children[4].innerHTML;
-
-    editInputId.value = id
-    editInputFirstName.value = firstName;
-    editInputLastName.value = lastName;
-    editInputAge.value = age;
-    editInputEmail.value = email;
-
+    editInputId.value = row.children[0].innerHTML;
+    editInputFirstName.value = row.children[1].innerHTML;
+    editInputLastName.value = row.children[2].innerHTML;
+    editInputAge.value = row.children[3].innerHTML;
+    editInputEmail.value = row.children[4].innerHTML;
     modalEdit.show();
 })
 
 tool(document, 'click', '.firstDeleteButton', (ev) => {
     let row = ev.target.parentNode.parentNode;
-    let id = row.children[0].innerHTML;
-    let firstName = row.children[1].innerHTML;
-    let lastName = row.children[2].innerHTML;
-    let age = row.children[3].innerHTML;
-    let email = row.children[4].innerHTML;
-    let roles = row.children[5].innerHTML.split(" ");
-
-    deleteInputId.value = id
-    deleteInputFirstName.value = firstName;
-    deleteInputLastName.value = lastName;
-    deleteInputAge.value = age;
-    deleteInputEmail.value = email;
-    roles.forEach(role => {
+    deleteInputId.value = row.children[0].innerHTML;
+    deleteInputFirstName.value = row.children[1].innerHTML;
+    deleteInputLastName.value = row.children[2].innerHTML;
+    deleteInputAge.value = row.children[3].innerHTML;
+    deleteInputEmail.value = row.children[4].innerHTML;
+    row.children[5].innerHTML.split(" ")
+        .forEach(role => {
         let option = document.createElement('option');
         option.innerHTML = role;
         deleteSelectRoles.appendChild(option);
@@ -140,7 +127,7 @@ tool(document, 'click', '.firstDeleteButton', (ev) => {
 })
 
 // <--- Bootstrap jQuery --->
-$('#modalEditUser').on('hidden.bs.modal', function() {
+$('#modalEditUser').on('hidden.bs.modal', function () {
     editInputId.innerHTML = '';
     editInputFirstName.innerHTML = '';
     editInputLastName.innerHTML = '';
@@ -149,14 +136,15 @@ $('#modalEditUser').on('hidden.bs.modal', function() {
     editInputPassword.value = '';
 })
 
-$('#modalDeleteUser').on('hidden.bs.modal', function() {
+$('#modalDeleteUser').on('hidden.bs.modal', function () {
     deleteSelectRoles.innerHTML = '';
 })
 // <--- /Bootstrap jQuery --->
 
 editUserForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    let updateUser = {id: editInputId.value,
+    let updateUser = {
+        id: editInputId.value,
         firstName: editInputFirstName.value,
         lastName: editInputLastName.value,
         age: editInputAge.value,
@@ -169,8 +157,9 @@ editUserForm.addEventListener('submit', (e) => {
 
     fetch(`/api/users/${editInputId.value}`, {
         method: "PATCH",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(updateUser)})
+        headers: {'Content-Type': 'application/json', 'X-XSRF-TOKEN': csrfToken},
+        body: JSON.stringify(updateUser)
+    })
         .then(updateRow(updateUser))
         .catch(err => console.log(`Error: ${err}`));
 
@@ -179,38 +168,65 @@ editUserForm.addEventListener('submit', (e) => {
 
 deleteUserForm.addEventListener('submit', (ev) => {
     ev.preventDefault();
-    fetch(`/api/users/${deleteInputId.value}`, {method: "DELETE"})
+    fetch(`/api/users/${deleteInputId.value}`, {
+        method: "DELETE",
+        headers: {'X-XSRF-TOKEN': csrfToken}
+    })
         .then(() => removeRow(deleteInputId.value))
         .catch(err => console.log(`Error: ${err}`));
+
     modalDelete.hide();
 })
 
-newUserButton.addEventListener('click', () => {
-    let roles = [...newUserSelectRoles.childNodes]
-        .filter(role => role.selected)
-        .map(role => obj = {id: role.value, name: role.text})
+newUserButton.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    let newUser = {
+        firstName: newUserFirstName.value,
+        lastName: newUserLastName.value,
+        age: newUserAge.value,
+        email: newUserEmail.value,
+        password: newUserPassword.value,
+        roles: [...newUserSelectRoles.childNodes]
+            .filter(role => role.selected)
+            .map(role => obj = {id: role.value, name: role.text})
+    }
 
     fetch(`/api/users`, {
         method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            firstName: newUserFirstName.value,
-            lastName: newUserLastName.value,
-            age: newUserAge.value,
-            email: newUserEmail.value,
-            password: newUserPassword.value,
-            roles: roles
-        })})
-        .then(console.log)
-        .then(redirectFunction)
+        headers: {'Content-Type': 'application/json', 'X-XSRF-TOKEN': csrfToken},
+        body: JSON.stringify(newUser)
+    })
+        .then(() =>
+            fetch('http://localhost:8080/api/users')
+                .then(res => res.json())
+                .then(data => createTable(data.slice(-1))))
+        .then(() => switchTabsOnNewUser())
         .catch(err => console.log(`Error: ${err}`));
 })
 
-function removeRow(id) {
+async function removeRow(id) {
     tbodyOfAllUsers.removeChild(document.getElementById(`rowUser_${id}`));
 }
 
-function updateRow(user) {
+async function switchTabsOnNewUser() {
+    let home = document.getElementById('home');
+    let profile = document.getElementById('profile');
+    let homeTab = document.getElementById('home-tab');
+    let profileTab = document.getElementById('profile-tab');
+
+    profileTab.classList.remove('active');
+    profile.classList.remove('active', 'show');
+    homeTab.classList.add('active');
+    home.classList.add('active', 'show');
+
+    newUserFirstName.value = '';
+    newUserLastName.value = '';
+    newUserAge.value = '';
+    newUserEmail.value = '';
+    newUserPassword.value = '';
+}
+
+async function updateRow(user) {
     let row = document.getElementById(`rowUser_${user.id}`);
     row.children[1].innerHTML = user.firstName;
     row.children[2].innerHTML = user.lastName;
